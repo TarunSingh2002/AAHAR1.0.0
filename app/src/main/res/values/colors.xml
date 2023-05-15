@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="black">#000</color>
+    <color name="gray">#5A5A5A</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="zircon">#e0e6e4</color>
+    <color name="red">#800000</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#fff</color>
+    <!--NEW COLOR -->
+    <color name="transparent">#00000000</color>
+    <color name="bg_color">#242C3B</color>
+    <color name="colorPrimaryDark">#242C3B</color>
+    <color name="colorPrimary">#242C3B</color>
+    <color name="light_blue">#37B6E9</color>
+    <color name="blue">#4B4CED</color>
+    <color name="Dark_blue">#353F54</color>
+    <color name="blue_black">#222834</color>
+    <!--Gradient 1 cardview of activity page -->
+    <color name="cardStartColor">#2C323F</color>
+    <color name="cardEndColor">#21242C</color>
+    <!--Gradient 2 light_blue_gradient -->
+    <color name="LightBlue_StartColor">#3B5B8F</color>
+    <color name="LightBlue_EndColor">#2B3F75</color>
+    <!-- Important individual colors-->
+    <color name="Text1">#F5F5F5</color>
+    <color name="Text2">#d3d3d3</color>
+    <color name="Text3">#A7A9AC</color>
+    <color name="white">#ffffff</color>
+    <color name="button">#262E3D</color>
+</resources>

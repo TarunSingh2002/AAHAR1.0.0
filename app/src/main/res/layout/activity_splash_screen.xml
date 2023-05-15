@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/dim_50"
+    android:background="@color/bg_color"
+    android:fitsSystemWindows="true"
+    tools:context=".SplashScreen">
+    <ImageView
+        android:id="@+id/id1_logo"
+        android:layout_width="@dimen/dim_250"
+        android:layout_height="@dimen/dim_250"
+        android:layout_gravity="center_horizontal"
+        app:srcCompat="@drawable/inapp_logo"
+        tools:ignore="ContentDescription,ImageContrastCheck" />
+    <TextView
+        android:id="@+id/id2_appName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_50"
+        android:text="@string/app_name"
+        android:fontFamily="@font/bangers"
+        android:textAlignment="center"
+        android:textColor="@color/Text1"
+        android:transitionName="T1_logo_Text"
+        android:layout_marginTop="@dimen/dim_20" />
+    <TextView
+        android:id="@+id/id3_slogan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/slogan"
+        android:fontFamily="@font/bangers"
+        android:textSize="@dimen/sp_30"
+        android:textColor="@color/Text1"
+        android:textAlignment="center"
+        android:layout_marginTop="@dimen/dim_1"/>
+
+</LinearLayout>
