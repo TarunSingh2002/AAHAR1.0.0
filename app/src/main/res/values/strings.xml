@@ -90,4 +90,6 @@
     <string name="string15">DELETE PROFILE.</string>
     <string name="title_activity_my_pin">myPin</string>
     <string name="title_activity_donate">Donate</string>
+    <string name="title_activity_food_map">FoodMap</string>
+    <string name="title_activity_receive">Receive</string>
 </resources>

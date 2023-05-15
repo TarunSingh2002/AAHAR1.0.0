@@ -66,15 +66,14 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-        /*cardReceive.setOnClickListener(new View.OnClickListener() {
+        cardReceive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent = new Intent(MainActivity.this, myPin.class);
+                Intent intent = new Intent(MainActivity.this, Receive.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
             }
-        }); */
+        });
         cardDonate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +82,29 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        cardFoodMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, FoodMap.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            }
+        });
+        cardHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, History.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            }
+        });
+        cardMyPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowAlertDialog();
+            }
+        });
+
     }
     private void checkIfEmailVerified(FirebaseUser firebaseUser) {
         if(!firebaseUser.isEmailVerified())
@@ -104,6 +126,23 @@ public class MainActivity extends AppCompatActivity {
                 intent.addCategory(Intent.CATEGORY_APP_EMAIL);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);   //TO email app in new Window and not within our app
                 startActivity(intent);
+            }
+        });
+        //Create the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        //Show the AlertDialog
+        alertDialog.show();
+    }
+    private void ShowAlertDialog() {
+        //setup the Alert Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Remove Current Pin");
+        //builder.setMessage("Please verify your email now. You can not login without email verification.");
+        //open Email Apps if user clicks/taps Continue button
+        builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this, "Your pin is removed", Toast.LENGTH_LONG).show();
             }
         });
         //Create the AlertDialog

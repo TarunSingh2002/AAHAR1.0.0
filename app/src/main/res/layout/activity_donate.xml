@@ -1,9 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+<ScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".Donate">
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Donate" />
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dim_20">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/donate"
+            android:fontFamily="@font/opensans"
+            android:textSize="@dimen/sp_28"
+            android:textColor="@color/Text1"
+            android:layout_marginBottom="@dimen/dim_20"
+            android:layout_marginLeft="@dimen/dim_10"
+            android:layout_marginTop="@dimen/dim_20"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_layout_with_stroke"
+            android:layout_marginBottom="@dimen/dim_25"
+            android:layout_marginTop="@dimen/dim_10"
+            android:padding="@dimen/dim_16">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/Text1"
+                android:text="To donate food. A pin will be placed on your current location. The receiver can navigate to the pin to collect the donated food. We kindly remind you that after donating the food, please delete the Current donation pin to avoid any confusion for future donations."
+                android:textSize="@dimen/sp_19"
+                android:fontFamily="@font/opensans" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/dim_5"
+            android:background="@drawable/bg_layout_with_stroke"
+            android:padding="@dimen/dim_16">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Food Items"
+                android:textColor="@color/Text1"
+                android:textSize="@dimen/sp_16"
+                android:fontFamily="@font/opensans"
+                android:layout_marginBottom="@dimen/dim_8"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dim_1"
+                android:background="@color/white"
+                android:layout_marginBottom="@dimen/dim_8"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/foodItemLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxStrokeColor="@color/light_blue"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/foodItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_16"
+                    android:fontFamily="@font/opensans"
+                    android:inputType="textEmailAddress"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/dim_5"
+            android:background="@drawable/bg_layout_with_stroke"
+            android:padding="@dimen/dim_16">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textColor="@color/Text1"
+                android:textSize="@dimen/sp_16"
+                android:fontFamily="@font/opensans"
+                android:layout_marginBottom="@dimen/dim_8"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dim_1"
+                android:background="@color/white"
+                android:layout_marginBottom="@dimen/dim_8"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/DescriptionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxStrokeColor="@color/light_blue"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/Description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_16"
+                    android:fontFamily="@font/opensans"
+                    android:inputType="textEmailAddress"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dim_200"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            map:uiZoomControls="true"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_add_pin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:layout_gravity="center_horizontal"
+            android:elevation="0dp"
+            android:layout_marginTop="@dimen/dim_10"
+            android:textSize="@dimen/sp_19"
+            android:textColor="@color/Text1"
+            android:background="@drawable/button_bg4"
+            android:fontFamily="@font/opensans"/>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/dim_10"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>
+</ScrollView>
