@@ -1,22 +1,27 @@
 package com.example.aahar100;
-
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,12 +35,20 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.aahar100.databinding.ActivityDonateBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class Donate extends FragmentActivity implements OnMapReadyCallback {
 
@@ -47,6 +60,8 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
     private TextInputLayout foodItemLayout,descriptionLayout;
     private ProgressBar progressBar;
     private FirebaseAuth authProfile;
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase firebaseDatabase;
     public static int LOCATION_REQUEST_CODE = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
     @Override
@@ -96,9 +111,9 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
-                    double lat = location.getLatitude();
+                    double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    LatLng userLocation = new LatLng(lat, longitude);
+                    LatLng userLocation = new LatLng(latitude, longitude);
                     String food=foodItem.getText().toString(),desc=description.getText().toString();
                     String name=getName();
                     //ADD a marker to user location
@@ -110,7 +125,18 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
                     marker.showInfoWindow();
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()),2000,null);
-
+                    // saving suer location in FoodPinAvailable
+                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("FoodPinAvailable");
+                    GeoFire geoFire = new GeoFire(ref);
+                    geoFire.setLocation(uid , new GeoLocation(latitude , longitude));
+                    //making button and edu=it text un-clickable
+                    mButtonAddPin.setEnabled(false);
+                    foodItem.setEnabled(false);foodItem.setFocusable(false);
+                    description.setEnabled(false);description.setFocusable(false);
+                    //changing color of button
+                    Drawable grayBackground = getResources().getDrawable(R.drawable.button_bg6);
+                    mButtonAddPin.setBackgroundDrawable(grayBackground);
                 }
             }
         });

@@ -55,4 +55,7 @@ dependencies {
     // swipe + picasso -------------------------------------------------------------------------------------
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    // geofire -----------------------------------------------------------------------------------------------
+    implementation 'com.firebase:geofire-android-common:3.2.0'
+    implementation 'com.firebase:geofire-android:3.2.0'
 }
