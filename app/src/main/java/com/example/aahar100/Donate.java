@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.aahar100.databinding.ActivityDonateBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -49,6 +50,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Donate extends FragmentActivity implements OnMapReadyCallback {
 
@@ -137,9 +141,27 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
                     //changing color of button
                     Drawable grayBackground = getResources().getDrawable(R.drawable.button_bg6);
                     mButtonAddPin.setBackgroundDrawable(grayBackground);
+                    insertDataInHistoryNodeInDataBase();
                 }
             }
         });
+    }
+    private void insertDataInHistoryNodeInDataBase(){
+        Map<String , Object> map = new HashMap<>();
+        map.put("food",foodItem.getText().toString());
+        map.put("description",description.getText().toString());
+        FirebaseDatabase.getInstance().getReference().child("History").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
+                .setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                      // do nothing
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Donate.this, "error while pushing data into History node", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
     private void checkLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED

@@ -203,10 +203,39 @@ public class deleteProfileActivity extends AppCompatActivity {
             });
         }
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Registered Users");
+        DatabaseReference databaseReferenceTwo = FirebaseDatabase.getInstance().getReference("FoodPinAvailable");
+        DatabaseReference databaseReferenceThree = FirebaseDatabase.getInstance().getReference("History");
+        // deleting Registered users
         databaseReference.child(firebaseUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d(TAG, "onSuccess: User data Deleted");
+                Log.d(TAG, "onSuccess: User data1 Deleted");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getMessage());
+                Toast.makeText(deleteProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        //deleting FoodPins
+        databaseReferenceTwo.child(firebaseUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d(TAG, "onSuccess: User data2 Deleted");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getMessage());
+                Toast.makeText(deleteProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        //deleting History
+        databaseReferenceThree.child(firebaseUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d(TAG, "onSuccess: User data2 Deleted");
                 deleteUser();
             }
         }).addOnFailureListener(new OnFailureListener() {
