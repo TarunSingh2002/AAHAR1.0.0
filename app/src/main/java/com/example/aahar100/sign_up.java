@@ -123,6 +123,16 @@ public class sign_up extends AppCompatActivity {
                                     }
                                 });
                                 alertDialog = builder.create();
+                                //change the button color (continue->red)
+                                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                    @Override
+                                    public void onShow(DialogInterface dialogInterface) {
+                                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.light_blue));
+                                        // Change the dialog box background color
+                                        alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.button_bg1);
+
+                                    }
+                                });
                                 alertDialog.show();
                             }
                             else

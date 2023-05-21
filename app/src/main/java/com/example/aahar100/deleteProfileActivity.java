@@ -153,6 +153,10 @@ public class deleteProfileActivity extends AppCompatActivity {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.red));
+                // Change the dialog box text color
+                // Change the dialog box background color
+                alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.button_bg1);
+
             }
         });
         //Show the AlertDialog

@@ -4,7 +4,7 @@
     <color name="gray">#5A5A5A</color>
     <color name="colorAccent">#D81B60</color>
     <color name="zircon">#e0e6e4</color>
-    <color name="red">#800000</color>
+    <color name="red">#FF0000</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#fff</color>
     <!--NEW COLOR -->
     <color name="transparent">#00000000</color>
