@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
@@ -24,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
 
     private CardView cardDonate,cardReceive,cardFoodMap,cardMyPin,cardHistory,profile,menu_setting,menu_logout;
-    private FirebaseAuth authProfile;
+    private FirebaseAuth authProfile;private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         profile=findViewById(R.id.profile);
         menu_setting=findViewById(R.id.menu_setting);
         menu_logout=findViewById(R.id.menu_logout);
-
+        progressBar=findViewById(R.id.progressBar);
         authProfile=FirebaseAuth.getInstance();
         FirebaseUser firebaseUser=authProfile.getCurrentUser();
 
@@ -75,16 +76,12 @@ public class MainActivity extends AppCompatActivity {
         });
         cardReceive.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Receive.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-            }
+            public void onClick(View view) { progressBar.setVisibility(View.VISIBLE);checkingPinExistOrNotForReceive();}
         });
         cardDonate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkingPinExistOrNot();
+                progressBar.setVisibility(View.VISIBLE);checkingPinExistOrNotForDonate();
             }
         });
         cardFoodMap.setOnClickListener(new View.OnClickListener() {
@@ -106,30 +103,11 @@ public class MainActivity extends AppCompatActivity {
         cardMyPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get the current user's ID
-                /*String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                // Get the reference to the users node
-                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-                usersRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // If the snapshot is not null, the user exists
-                        if (dataSnapshot.exists()) {
-                            showAlertDialogTwo();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Pin not exist so it can't be removed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(MainActivity.this, "Error checking user existence", Toast.LENGTH_LONG).show();
-                    }
-                });*/
                 showAlertDialogTwo();
             }
         });
     }
-    private void checkingPinExistOrNot() {
+    private void checkingPinExistOrNotForDonate() {
         // Get the current user's ID
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Get the reference to the users node
@@ -140,8 +118,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // If the snapshot is not null, the user exists
                 if (dataSnapshot.exists()) {
+                    progressBar.setVisibility(View.GONE);
                     showAlertDialogThree();
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     Intent intent = new Intent(MainActivity.this, Donate.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
@@ -149,6 +129,34 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(MainActivity.this, "Error checking user existence", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    private void checkingPinExistOrNotForReceive() {
+        // Get the current user's ID
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        // Get the reference to the users node
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("FoodPinAvailable");
+        // Check if the user ID exists in the users node
+        usersRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // If the snapshot is not null, the user exists
+                if (dataSnapshot.exists()) {
+                    progressBar.setVisibility(View.GONE);
+                    showAlertDialogThree();
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    Intent intent = new Intent(MainActivity.this, Receive.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(MainActivity.this, "Error checking user existence", Toast.LENGTH_LONG).show();
             }
         });
