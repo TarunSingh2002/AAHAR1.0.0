@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         //setup the Alert Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Pin already exist");
-        builder.setMessage("Please first remove current pin to place a new pin ");
+        builder.setMessage("In order to proceed further, please remove your current pin");
         //Create the AlertDialog
         AlertDialog alertDialog = builder.create();
         //Show the AlertDialog
