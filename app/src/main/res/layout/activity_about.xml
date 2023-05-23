@@ -54,6 +54,7 @@
             android:layout_gravity="center"
             android:orientation="horizontal">
             <androidx.cardview.widget.CardView
+                android:id="@+id/instagram"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="@dimen/dim_165"
@@ -87,7 +88,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardReceive"
+                android:id="@+id/facebook"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="@dimen/dim_165"
@@ -121,7 +122,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardFoodMap"
+                android:id="@+id/twitter"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="@dimen/dim_165"
@@ -155,7 +156,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/menu_update_profile"
+                android:id="@+id/version"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="@dimen/dim_165"
