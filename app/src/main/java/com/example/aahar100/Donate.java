@@ -142,7 +142,7 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
                 .setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                      // do nothing
+                        // do nothing
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
