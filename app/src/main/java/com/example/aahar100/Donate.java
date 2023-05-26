@@ -69,7 +69,7 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
         String food = foodItem.getText().toString(), desc = description.getText().toString();
         String name = getName();
         DatabaseReference refTwo = FirebaseDatabase.getInstance().getReference("FoodMap");
-        ReadWriteLocation readWriteLocation = new ReadWriteLocation(latitude, longitude);
+        ReadWriteLocation readWriteLocation = new ReadWriteLocation(latitude, longitude, getName());
         refTwo.child(key).setValue(readWriteLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

@@ -1,5 +1,6 @@
 package com.example.aahar100;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -7,12 +8,15 @@ import androidx.cardview.widget.CardView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
 
     private CardView cardDonate,cardReceive,cardFoodMap,cardMyPin,cardHistory,profile,menu_setting,menu_logout;
-    private FirebaseAuth authProfile;private ProgressBar progressBar;
+    private FirebaseAuth authProfile;private ProgressBar progressBar; private FirebaseUser firebaseUser;
+    private static final  String TAG="MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
         menu_logout=findViewById(R.id.menu_logout);
         progressBar=findViewById(R.id.progressBar);
         authProfile=FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser=authProfile.getCurrentUser();
+        firebaseUser=authProfile.getCurrentUser();
 
-        if(firebaseUser == null)
-        {
+        if(firebaseUser == null) {
             Toast.makeText(MainActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-        } else {
+        }
+        else {
             checkIfEmailVerified(firebaseUser);
         }
         profile.setOnClickListener(new View.OnClickListener() {
@@ -87,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
         cardFoodMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                checkingPinExistOrNotForFoodMap();
+                Intent intent = new Intent(MainActivity.this, FoodMap.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
             }
         });
         cardHistory.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +108,33 @@ public class MainActivity extends AppCompatActivity {
         cardMyPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);showAlertDialogTwo();
+                progressBar.setVisibility(View.VISIBLE);
+                // Get the current user's ID
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                // Get the reference to the users node
+                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("DonateIdMapping");
+                // Check if the user ID exists in the users node
+                usersRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //exist
+                        if (dataSnapshot.exists()) {
+                            progressBar.setVisibility(View.GONE);
+                            //procede further to delete it
+                            String a = dataSnapshot.child("donationId").getValue(String.class);
+                            showAlertDialogToRemoveCurrentPin(a);
+                        } else { //exist not
+                            progressBar.setVisibility(View.GONE);
+                            //show that it does not exist
+                            showAlertDialogPinDoesNotExist();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this, "Error checking user existence", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
     }
@@ -110,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         // Get the current user's ID
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Get the reference to the users node
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("FoodPinAvailable");
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("DonateIdMapping");
         // Check if the user ID exists in the users node
         usersRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -137,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         // Get the current user's ID
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Get the reference to the users node
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("FoodPinAvailable");
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("DonateIdMapping");
         // Check if the user ID exists in the users node
         usersRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -196,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         //Show the AlertDialog
         alertDialog.show();
     }
-    private void showAlertDialogTwo() {
+    private void showAlertDialogToRemoveCurrentPin(String id) {
         //setup the Alert Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Remove Current Pin");
@@ -205,11 +237,35 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Get the current user's ID
-                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("FoodPinAvailable");
-                GeoFire geoFire = new GeoFire(ref);
-                geoFire.removeLocation(uid);
+
+                DatabaseReference databaseReferenceTwo = FirebaseDatabase.getInstance().getReference("DonateIdMapping");
+                DatabaseReference databaseReferenceOne = FirebaseDatabase.getInstance().getReference("FoodMap");
+                //deleting DonateIdMapping
+                databaseReferenceTwo.child(firebaseUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "onSuccess: User data2 Deleted");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.getMessage());
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                //delete FoodMap pin
+                databaseReferenceOne.child(id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "onSuccess: User data2 Deleted");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.getMessage());
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 Toast.makeText(MainActivity.this, "Your pin is removed", Toast.LENGTH_LONG).show();
             }
         });
@@ -247,41 +303,14 @@ public class MainActivity extends AppCompatActivity {
         //Show the AlertDialog
         alertDialog.show();
     }
-    private void checkingPinExistOrNotForFoodMap(){
-        // Get the current user's ID
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // Get the reference to the users node
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("FoodPinAvailable");
-        // Check if the user ID exists in the users node
-        usersRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // If the snapshot is not null, the user exists
-                if (dataSnapshot.exists()) {
-                    progressBar.setVisibility(View.GONE);
-                    Intent intent = new Intent(MainActivity.this, FoodMap.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    showAlertDialogFive();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(MainActivity.this, "Error checking user existence", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void showAlertDialogFive() {
+    private void showAlertDialogPinDoesNotExist() {
         //setup the Alert Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Pin Not exist");
-        builder.setMessage("In order to proceed further, please first make a donation pin");
+        builder.setTitle("Pin does not exist");
+        builder.setMessage("In order to proceed further, please first place Donation Pin");
         //Create the AlertDialog
         AlertDialog alertDialog = builder.create();
+        //change the button color (continue->red)
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
@@ -292,7 +321,6 @@ public class MainActivity extends AppCompatActivity {
         //Show the AlertDialog
         alertDialog.show();
     }
-
     protected void onStart() {
         super.onStart();
         FirebaseUser firebaseUser = authProfile.getCurrentUser();

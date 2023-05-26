@@ -26,8 +26,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -206,9 +209,42 @@ public class deleteProfileActivity extends AppCompatActivity {
                 }
             });
         }
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Registered Users");
-        DatabaseReference databaseReferenceTwo = FirebaseDatabase.getInstance().getReference("FoodPinAvailable");
+        DatabaseReference databaseReferenceTwo = FirebaseDatabase.getInstance().getReference("DonateIdMapping");
         DatabaseReference databaseReferenceThree = FirebaseDatabase.getInstance().getReference("History");
+        //first remove FoodPin
+        databaseReferenceTwo.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //exist
+                if (dataSnapshot.exists()) {
+
+                    //procede further to delete it
+                    String a = dataSnapshot.child("donationId").getValue(String.class);
+                    DatabaseReference databaseReferenceOne = FirebaseDatabase.getInstance().getReference("FoodMap");
+                    databaseReferenceOne.child(a).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d(TAG, "onSuccess: User data2 Deleted");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, e.getMessage());
+                            Toast.makeText(deleteProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else { //exist not
+                    //do nothing
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(deleteProfileActivity.this, "Error checking user existence", Toast.LENGTH_LONG).show();
+            }
+        });
         // deleting Registered users
         databaseReference.child(firebaseUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -222,7 +258,7 @@ public class deleteProfileActivity extends AppCompatActivity {
                 Toast.makeText(deleteProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        //deleting FoodPins
+        //deleting DonateIdMapping
         databaseReferenceTwo.child(firebaseUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -249,5 +285,6 @@ public class deleteProfileActivity extends AppCompatActivity {
                 Toast.makeText(deleteProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 }

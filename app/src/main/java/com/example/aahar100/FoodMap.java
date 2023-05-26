@@ -34,16 +34,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class FoodMap extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityFoodMapBinding binding;
     private FirebaseAuth authProfile;
-    public static int LOCATION_REQUEST_CODE = 100;
-    FusedLocationProviderClient fusedLocationProviderClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,25 @@ public class FoodMap extends FragmentActivity implements OnMapReadyCallback {
         }
         authProfile = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = authProfile.getCurrentUser();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        DatabaseReference foodMapRef = FirebaseDatabase.getInstance().getReference("FoodMap");
+        foodMapRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    // Retrieve the user ID
+                    //String userId = userSnapshot.getKey();
+                    double a = childSnapshot.child("lat").getValue(double.class);
+                    double b = childSnapshot.child("lng").getValue(double.class);
+                    String c = childSnapshot.child("name").getValue(String.class);
+                    LatLng userLocation = new LatLng(a,b);
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c).icon(setIcon(FoodMap.this, R.drawable.baseline_room_service_24)));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle any errors that occur during the database operation
+            }
+        });
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -68,16 +87,24 @@ public class FoodMap extends FragmentActivity implements OnMapReadyCallback {
         mMap.getUiSettings().setZoomControlsEnabled(true);  //zoom in out control
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(FoodMap.this,R.raw.map_style));  // map style
         mMap.setPadding(0,100,0,125); //left padding,top padding , right padding , bottom padding
-        checkLocationPermission();
+        mMap.getUiSettings().setMapToolbarEnabled(false);
     }
-    private void checkLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            getUserLocation();
-        } else {
-            requestForPermission();
-        }
+    private String getName() {
+        authProfile = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = authProfile.getCurrentUser();
+        return firebaseUser.getDisplayName();
     }
+    public BitmapDescriptor setIcon(Activity context, int drawableId) {
+        Drawable drawable=ActivityCompat.getDrawable(context,drawableId);
+        drawable.setBounds(0,0,drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+        Bitmap bitmap=Bitmap.createBitmap(drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight(),Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+    /*
+    public static int LOCATION_REQUEST_CODE = 100;
+    FusedLocationProviderClient fusedLocationProviderClient;
     private void requestForPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
     }
@@ -94,19 +121,16 @@ public class FoodMap extends FragmentActivity implements OnMapReadyCallback {
             }
         }
     }
-    private String getName() {
-        authProfile = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = authProfile.getCurrentUser();
-        return firebaseUser.getDisplayName();
+
+     private void checkLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getUserLocation();
+        } else {
+            requestForPermission();
+        }
     }
-    public BitmapDescriptor setIcon(Activity context, int drawableId) {
-        Drawable drawable=ActivityCompat.getDrawable(context,drawableId);
-        drawable.setBounds(0,0,drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
-        Bitmap bitmap=Bitmap.createBitmap(drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight(),Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
+
     private void getUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -133,4 +157,9 @@ public class FoodMap extends FragmentActivity implements OnMapReadyCallback {
             }
         });
     }
+
+    inside oncreate-->
+    fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        checkLocationPermission();
+   */
 }
