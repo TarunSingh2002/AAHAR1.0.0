@@ -1,6 +1,7 @@
 package com.example.aahar100;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -35,17 +36,23 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Receive extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityReceiveBinding binding;
     private FirebaseAuth authProfile;
+    private ChildEventListener childEventListener;
+    private Map<String, Marker> markerMap; // Store marker references with child keys
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,26 +68,46 @@ public class Receive extends FragmentActivity implements OnMapReadyCallback {
             mapFragment.getMapAsync(this);
         }
         authProfile = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = authProfile.getCurrentUser();
+        markerMap = new HashMap<>(); // Initialize the marker map
         DatabaseReference foodMapRef = FirebaseDatabase.getInstance().getReference("FoodMap");
-        foodMapRef.addValueEventListener(new ValueEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    // Retrieve the user ID
-                    //String userId = userSnapshot.getKey();
-                    double a = childSnapshot.child("lat").getValue(double.class);
-                    double b = childSnapshot.child("lng").getValue(double.class);
-                    String c = childSnapshot.child("name").getValue(String.class);
-                    LatLng userLocation = new LatLng(a,b);
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c).icon(setIcon(Receive.this, R.drawable.baseline_room_service_24)));
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                double a = dataSnapshot.child("lat").getValue(double.class);
+                double b = dataSnapshot.child("lng").getValue(double.class);
+                String c = dataSnapshot.child("name").getValue(String.class);
+                LatLng userLocation = new LatLng(a, b);
+                Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c).icon(setIcon(Receive.this, R.drawable.baseline_room_service_24)));
+                String childKey = dataSnapshot.getKey(); // Get the child key
+                markerMap.put(childKey, marker); // Store the marker reference with the child key
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle the case when a child's data is updated
+                Toast.makeText(Receive.this, "T1", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                // Handle the case when a child is removed
+                String childKey = dataSnapshot.getKey(); // Get the child key
+                Marker marker = markerMap.get(childKey); // Get the corresponding marker
+                if (marker != null) {
+                    marker.remove(); // Remove the marker from the map
+                    markerMap.remove(childKey); // Remove the marker reference from the map
                 }
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle any errors that occur during the database operation
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle the case when a child changes position within the list
+                Toast.makeText(Receive.this, "T3", Toast.LENGTH_SHORT).show();
             }
-        });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors that occur during the database operation
+                Toast.makeText(Receive.this, "T4", Toast.LENGTH_SHORT).show();
+            }
+        };
+        foodMapRef.addChildEventListener(childEventListener);
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -97,10 +124,12 @@ public class Receive extends FragmentActivity implements OnMapReadyCallback {
         drawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-    private String getName() {
-        authProfile = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = authProfile.getCurrentUser();
-        return firebaseUser.getDisplayName();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Remove the child event listener when the activity is destroyed
+        DatabaseReference foodMapRef = FirebaseDatabase.getInstance().getReference("FoodMap");
+        foodMapRef.removeEventListener(childEventListener);
     }
 }
 //DonateIdMapping

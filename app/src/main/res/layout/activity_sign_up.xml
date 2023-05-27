@@ -51,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:textSize="@dimen/sp_16"
+                    android:textColor="@color/Text1"
                     android:fontFamily="@font/opensans"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_16"
                     android:fontFamily="@font/opensans"
+                    android:textColor="@color/Text1"
                     android:inputType="textEmailAddress"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_16"
                     android:fontFamily="@font/opensans"
+                    android:textColor="@color/Text1"
                     android:inputType="phone"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,6 +111,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_16"
                     android:fontFamily="@font/opensans"
+                    android:textColor="@color/Text1"
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,6 +132,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_16"
                     android:fontFamily="@font/opensans"
+                    android:textColor="@color/Text1"
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
