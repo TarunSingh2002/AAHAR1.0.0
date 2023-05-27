@@ -261,7 +261,7 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
         else {
             // Get the user's current location
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
