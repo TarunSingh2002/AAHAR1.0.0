@@ -4,7 +4,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@drawable/background_with_triangle</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/blue</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>
     <!--<style name="Theme.AAHAR.NoActionBar">
