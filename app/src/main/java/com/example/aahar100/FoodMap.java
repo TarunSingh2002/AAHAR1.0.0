@@ -115,6 +115,10 @@ public class FoodMap extends FragmentActivity implements OnMapReadyCallback {
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(FoodMap.this,R.raw.map_style));  // map style
         mMap.setPadding(0,100,0,125); //left padding,top padding , right padding , bottom padding
         mMap.getUiSettings().setMapToolbarEnabled(false);
+        // Animate camera to India
+        LatLng indiaLatLng = new LatLng(20.5937, 78.9629);
+        float zoomLevel = 5.0f; // You can adjust the zoom level as per your preference
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(indiaLatLng, zoomLevel));
     }
     public BitmapDescriptor setIcon(Activity context, int drawableId) {
         Drawable drawable=ActivityCompat.getDrawable(context,drawableId);
