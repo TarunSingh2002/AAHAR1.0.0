@@ -85,10 +85,18 @@ public class Receive extends FragmentActivity implements OnMapReadyCallback {
                 double a = dataSnapshot.child("lat").getValue(double.class);
                 double b = dataSnapshot.child("lng").getValue(double.class);
                 String c = dataSnapshot.child("name").getValue(String.class);
+                String d= dataSnapshot.child("number").getValue(String.class);
+
                 LatLng userLocation = new LatLng(a, b);
-                Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c).icon(setIcon(Receive.this, R.drawable.baseline_room_service_24)));
-                String childKey = dataSnapshot.getKey(); // Get the child key
-                markerMap.put(childKey, marker); // Store the marker reference with the child key
+                if (d.equals("not a number flag")) {
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c).icon(setIcon(Receive.this, R.drawable.baseline_room_service_24)));
+                    String childKey = dataSnapshot.getKey(); // Get the child key
+                    markerMap.put(childKey, marker); // Store the marker reference with the child key
+                } else {
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c+"||"+d).icon(setIcon(Receive.this, R.drawable.baseline_room_service_24)));
+                    String childKey = dataSnapshot.getKey(); // Get the child key
+                    markerMap.put(childKey, marker); // Store the marker reference with the child key
+                }
             }
 
             @Override

@@ -1,6 +1,7 @@
 package com.example.aahar100;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -8,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +50,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +66,7 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
     private FirebaseAuth authProfile;
     private static double latitude;
     private static double longitude;
+    String number ="not a number flag";
     private LocationManager locationManager;
     public static int LOCATION_REQUEST_CODE = 100;
     private void FoodMapDataPushFunction(String key) {
@@ -69,7 +74,7 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
         String food = foodItem.getText().toString(), desc = description.getText().toString();
         String name = getName();
         DatabaseReference refTwo = FirebaseDatabase.getInstance().getReference("FoodMap");
-        ReadWriteLocation readWriteLocation = new ReadWriteLocation(latitude, longitude, getName());
+        ReadWriteLocation readWriteLocation = new ReadWriteLocation(latitude, longitude, getName() , number);
         refTwo.child(key).setValue(readWriteLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -190,7 +195,7 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
         if (!validateFood() | !validateDescription()) {
             return;
         } else {
-            WorkingRandomKey();
+            showAlertDialog();
         }
     }
     private Boolean validateFood() {
@@ -301,5 +306,57 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
     }
     public static double getLongitude() {
         return longitude;
+    }
+    private void showAlertDialog() {
+        //setup the Alert Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(Donate.this);
+        builder.setTitle("Phone number ");
+        builder.setMessage("Do you want to show your Phone number show to receivers, it will help to connect with you");
+        builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("Registered Users");
+                referenceProfile.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ReadWriteUserDetails readUserDetails = snapshot.getValue(ReadWriteUserDetails.class);
+                        if (readUserDetails != null) {
+                            number = readUserDetails.mobile;
+                            WorkingRandomKey();
+                        } else {
+                            Toast.makeText(Donate.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(Donate.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(Donate.this, "you rejected Number request", Toast.LENGTH_SHORT).show();
+                WorkingRandomKey();
+            }
+        });
+        //Create the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        //change the button color (continue->red)
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.light_blue));
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.light_blue));
+                // Change the dialog box text color
+                // Change the dialog box background color
+                alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.button_bg1);
+
+            }
+        });
+        //Show the AlertDialog
+        alertDialog.show();
     }
 }
