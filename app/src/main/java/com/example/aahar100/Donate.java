@@ -72,16 +72,16 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
     private void FoodMapDataPushFunction(String key) {
         LatLng userLocation = new LatLng(latitude, longitude);
         String food = foodItem.getText().toString(), desc = description.getText().toString();
-        String name = getName();
+        String name = getName(), val = foodItem.getText().toString();
         DatabaseReference refTwo = FirebaseDatabase.getInstance().getReference("FoodMap");
-        ReadWriteLocation readWriteLocation = new ReadWriteLocation(latitude, longitude, getName() , number);
+        ReadWriteLocation readWriteLocation = new ReadWriteLocation(latitude, longitude, getName() , number, val);
         refTwo.child(key).setValue(readWriteLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(Donate.this, "isSuccessful", Toast.LENGTH_SHORT).show();
                     //ADD a marker to user location
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(name + "||" + food).icon(setIcon(Donate.this, R.drawable.baseline_room_service_24)));
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(name + "||" + food).icon(setIcon(Donate.this, R.drawable.marker_donator_style)));
                     // Disable the navigation button
                     mMap.getUiSettings().setMapToolbarEnabled(false);
                     //Animate the marker to the centre of the screen

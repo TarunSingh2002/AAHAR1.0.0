@@ -75,8 +75,9 @@ public class FoodMap extends FragmentActivity implements OnMapReadyCallback {
                 double a = dataSnapshot.child("lat").getValue(double.class);
                 double b = dataSnapshot.child("lng").getValue(double.class);
                 String c = dataSnapshot.child("name").getValue(String.class);
+                String d= dataSnapshot.child("food").getValue(String.class);
                 LatLng userLocation = new LatLng(a, b);
-                Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c).icon(setIcon(FoodMap.this, R.drawable.baseline_room_service_24)));
+                Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c+"||"+d).icon(setIcon(FoodMap.this, R.drawable.marker_donator_style)));
                 String childKey = dataSnapshot.getKey(); // Get the child key
                 markerMap.put(childKey, marker); // Store the marker reference with the child key
             }

@@ -86,14 +86,14 @@ public class Receive extends FragmentActivity implements OnMapReadyCallback {
                 double b = dataSnapshot.child("lng").getValue(double.class);
                 String c = dataSnapshot.child("name").getValue(String.class);
                 String d= dataSnapshot.child("number").getValue(String.class);
-
+                String e= dataSnapshot.child("food").getValue(String.class);
                 LatLng userLocation = new LatLng(a, b);
                 if (d.equals("not a number flag")) {
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c).icon(setIcon(Receive.this, R.drawable.baseline_room_service_24)));
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c+"||"+e).icon(setIcon(Receive.this, R.drawable.marker_donator_style)));
                     String childKey = dataSnapshot.getKey(); // Get the child key
                     markerMap.put(childKey, marker); // Store the marker reference with the child key
                 } else {
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c+"||"+d).icon(setIcon(Receive.this, R.drawable.baseline_room_service_24)));
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(userLocation).title(c+"||"+d+"||"+e).icon(setIcon(Receive.this, R.drawable.marker_donator_style)));
                     String childKey = dataSnapshot.getKey(); // Get the child key
                     markerMap.put(childKey, marker); // Store the marker reference with the child key
                 }
@@ -189,8 +189,8 @@ public class Receive extends FragmentActivity implements OnMapReadyCallback {
                             if (userMarker != null) {
                                 userMarker.remove();
                             }
-                            userMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
-                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                            userMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(getName()+"|| Your Location").icon(setIcon(Receive.this, R.drawable.framereceiver_two)));
+                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 20);
                             mMap.animateCamera(cameraUpdate);
                         } else {
                             Toast.makeText(Receive.this, "Unable to retrieve location", Toast.LENGTH_SHORT).show();
@@ -218,6 +218,11 @@ public class Receive extends FragmentActivity implements OnMapReadyCallback {
             startActivity(intent);
             finish();
         }
+    }
+    private String getName() {
+        authProfile = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = authProfile.getCurrentUser();
+        return firebaseUser.getDisplayName();
     }
 }
 //DonateIdMapping
