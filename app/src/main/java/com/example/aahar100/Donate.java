@@ -25,6 +25,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -64,10 +67,12 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
     private TextInputLayout foodItemLayout, descriptionLayout;
     private ProgressBar progressBar;
     private FirebaseAuth authProfile;
-    private static double latitude;
-    private static double longitude;
+    private  double latitude;
+    private  double longitude;
     String number ="not a number flag";
     private LocationManager locationManager;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationCallback locationCallback;
     public static int LOCATION_REQUEST_CODE = 100;
     private void FoodMapDataPushFunction(String key) {
         LatLng userLocation = new LatLng(latitude, longitude);
@@ -259,53 +264,31 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
         description = findViewById(R.id.Description);
         foodItemLayout = findViewById(R.id.foodItemLayout);
         descriptionLayout = findViewById(R.id.DescriptionLayout);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestForPermission();
-        }//runtime permission
-        else {
-            // Get the user's current location
-            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-            }
-            // Save the latitude and longitude as global double variables
-            Donate.latitude = latitude;
-            Donate.longitude = longitude;
-            mButtonAddPin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    fetchFoodAndDescription();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                Location location = locationResult.getLastLocation();
+                if (location != null) {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
                 }
-            });
-        }
-    }
-    private void requestForPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-    }
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == LOCATION_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Location Is Permission Accepted For This User", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Donate.this, UserProfileActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(this, "permission Rejected", Toast.LENGTH_SHORT).show();
             }
+        };
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000); // Update location every 5 seconds
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+        } else {
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
         }
-    }
-    public static double getLatitude() {
-        return latitude;
-    }
-    public static double getLongitude() {
-        return longitude;
+        mButtonAddPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fetchFoodAndDescription();
+            }
+        });
     }
     private void showAlertDialog() {
         //setup the Alert Builder
@@ -358,5 +341,10 @@ public class Donate extends FragmentActivity implements OnMapReadyCallback {
         });
         //Show the AlertDialog
         alertDialog.show();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 }
