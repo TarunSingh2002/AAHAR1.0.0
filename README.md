@@ -135,8 +135,8 @@ We value your feedback and suggestions for improving the Aahar app. If you encou
     <td>Login</td>   
   </tr>
   <tr>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/cb3985fc-20d0-4d8a-b3f1-6182180b9244" width="220" height="220"></video></td>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/0e3484e3-bcd4-49e2-9b05-7dc23f92ddb7" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/7d12d6f8-0a2d-4e52-bde3-f12e0ce3b10d" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/41af74c9-9637-4109-a3b3-71c4464c4e0f" width="220" height="220"></video></td>
   </tr>
  </table>
  <table>
@@ -145,19 +145,18 @@ We value your feedback and suggestions for improving the Aahar app. If you encou
     <td>Receive</td>
   </tr>
   <tr>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/b0a59d31-519a-427a-b9fb-91f7ec1925cb" width="220" height="220"></video></td>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/961db026-a8d9-47ee-80ca-1b6cce49d10c" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/2bab2073-b50d-44ea-bc85-15f0d581811a" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/22e357e5-e964-435c-98d4-472c2363a043" width="220" height="220"></video></td>
   </tr>
  </table>
- 
  <table>
   <tr>
     <td>Food Map</td>
     <td>Logout</td>
   </tr>
   <tr>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/3cfc1e57-cf82-4a76-8ce8-9e55b3063174" width="220" height="220"></video></td>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/b2b02b71-0952-48d2-81e6-f263d0fac559" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/0e80071e-412d-4d41-997d-6dd727fd76e4" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/74ed0450-92fe-41be-ba78-2d7ac27b359a" width="220" height="220"></video></td>
   </tr>
  </table>
  <table>
@@ -166,8 +165,8 @@ We value your feedback and suggestions for improving the Aahar app. If you encou
     <td>Reset Password</td>
   </tr>
   <tr>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/5394e85e-672a-466f-a943-5898b208b5e4" width="220" height="220"></video></td>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/06c3af73-ad12-492e-b174-8fb05c762687" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/121b1740-079a-4f60-b006-7ac75ec97d42" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/6d0e9948-1adc-4089-ab4d-4ed3c4b43853" width="220" height="220"></video></td>
   </tr>
  </table>
  <table>
@@ -176,8 +175,8 @@ We value your feedback and suggestions for improving the Aahar app. If you encou
     <td>Update Profile</td> 
   </tr>
   <tr>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/4356c629-7daf-4a54-9766-4b7412cae821" width="220" height="220"></video></td>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/5375f19a-7215-4031-a084-5f2245e0367e" width="220" height="220"></video></td>
+    <td><video src="" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/dd949a47-0e30-4797-b9f6-2b9f8809351f" width="220" height="220"></video></td>
   </tr>
  </table>
   <table>
@@ -186,8 +185,8 @@ We value your feedback and suggestions for improving the Aahar app. If you encou
     <td>Contact Us</td>
   </tr>
   <tr>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/ddbee3bb-c297-4e77-b726-2f4c71bdbab5" width="220" height="220"></video></td>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/fc801764-9511-4a6f-81a4-e762e6fadd1b" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/82732278-e9ea-43ab-a8cf-ed067935270a" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/addfc763-014f-4c13-9cdc-dc1d7ae12a2d" width="220" height="220"></video></td>
   </tr>
  </table>
  <table>
@@ -196,11 +195,32 @@ We value your feedback and suggestions for improving the Aahar app. If you encou
     <td>delete Profile</td>
   </tr>
   <tr>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/f5bd86c3-be27-4115-a764-c4ddbd00f4ad" width="220" height="220"></video></td>
-    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/40e65d6d-0f74-4e9b-81ff-ab742d422d12" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/230794b8-256e-40fd-827e-162784ad75a6" width="220" height="220"></video></td>
+    <td><video src="https://github.com/TarunSingh2002/AAHAR1.0.0/assets/133011792/ba0a6296-98fa-4a19-8e1d-ce601b09f1f9" width="220" height="220"></video></td>
   </tr>
  </table>
  </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
