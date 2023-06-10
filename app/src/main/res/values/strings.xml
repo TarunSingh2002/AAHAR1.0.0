@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">AAHAR</string>
-    <string name="YOUR_API_KEY">AIzaSyDA2UAGCpTf2FwHobEzplc6_FA-3c_PGQA</string>
+    <string name="YOUR_API_KEY">YOUR_API_KEY</string>
     <string name="Signup_to_start">SignUp to start your new Journey</string>
     <string name="welcome">Welcome to AAHAR</string>
     <string name="New_User_Sign_Up">New user? SIGN UP</string>
